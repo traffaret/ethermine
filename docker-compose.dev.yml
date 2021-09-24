@@ -1,0 +1,25 @@
+version: "3.8"
+
+volumes:
+  app-venv-data:
+
+networks:
+  app:
+
+services:
+  app:
+    build:
+      dockerfile: ./docker/python/Dockerfile
+      context: ./
+      args:
+        USER_ID: ${APP_USER_ID}
+    networks:
+      - app
+    environment:
+      POETRY_VIRTUALENVS_PATH: "/home/ethermine/.venv"
+      POETRY_VIRTUALENVS_IN_PROJECT: 1
+    volumes:
+      - ./src:/home/ethermine/src:delegated
+      - ./.env:/home/ethermine/.env:delegated
+      - ./pyproject.toml:/home/ethermine/pyproject.toml:delegated
+      - app-venv-data:/home/ethermine/.venv
